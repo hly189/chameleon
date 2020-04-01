@@ -27,12 +27,13 @@ def get_args():
 	
 #---- db help 
 def dbHelp(): 
-	print("Usage %s -help, -start, -stop, -init, -restart" % argv[0])
+	print("Usage %s -help, -start, -stop, -init, -restart, -login" % argv[0])
 	print("-help: Usage")
 	print("-start: Start Database")
 	print("-stop: Stop Database")
 	print("-restart: Restart Database")
 	print("-init: initialize user and password for chameleon")
+	print("-login <user> - login to user")
 
 #---- db login 
 def dbLogin(user): 

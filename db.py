@@ -1,12 +1,12 @@
-#! /usr/bin/python
-
-
+#! /usr/bin/env python3  
+ 
 from os 	import popen, system 
 from socket	import gethostname
 from sys	import argv
 from getpass	import getpass
 import argparse
 import pymysql
+import myloginpath
 
 #-------------------------------------------------------------
 # Functions 
@@ -35,9 +35,16 @@ def dbHelp():
 	print("-init: initialize user and password for chameleon")
 	print("-login <user> - login to user")
 
+#---- Set login without password 
+def setlogin(user): 
+	print("Set login for user: %s" % user)
+	dbLoginCommand = '/usr/local/mysql/bin/mysql_config_editor set --login-path=%s --user=%s --password' % (user, user) 
+	system(dbLoginCommand)
+	
+
 #---- db login 
 def dbLogin(user): 
-	dbLoginCommand = '/usr/local/mysql/bin/mysql -u %s -p' % user 
+	dbLoginCommand = '/usr/local/mysql/bin/mysql --login-path=%s' % user 
 	system(dbLoginCommand)
 
 #---- db service 
@@ -56,15 +63,13 @@ def dbService(command):
 		print("Falied to Start")
 
 #---- get db connection
-def getMySqlConnection(usr='root', password=''): 
+def getMySqlConnection(usr='root'): 
 	ipaddress   = "127.0.0.1"
 	charset     = "utf8mb4"
 	curtype     = pymysql.cursors.DictCursor 
 	
-	if password == '': 
-		password = getpass("Enter root password: ")
-	
-	sqlCon 	    = pymysql.connect(host=ipaddress, user=usr, password=password, charset=charset, cursorclass=curtype)
+	conf = myloginpath.parse(usr)
+	sqlCon 	    = pymysql.connect(**conf, host=ipaddress, charset=charset, cursorclass=curtype)
 	sqlCursor   = sqlCon.cursor()
 	return sqlCon, sqlCursor 
 
@@ -121,8 +126,13 @@ def main():
 	if args.login: 
 		dbLogin(args.login[0])
 	# Init database
-	if args.init: 
+	if args.init:
+		# Set login-path for root 
+		#setlogin('root')
 		createDbUser(dbChameleonUser, dbChameleonPass)
+		# Set login-path for chameleon 
+		print("Password for chameleon is %s" % dbChameleonPass)
+		setlogin(dbChameleonUser)
 		userList = listDb()
 		
 		print("List of users:");

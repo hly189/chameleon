@@ -128,7 +128,7 @@ def main():
 	# Init database
 	if args.init:
 		# Set login-path for root 
-		#setlogin('root')
+		setlogin('root')
 		createDbUser(dbChameleonUser, dbChameleonPass)
 		# Set login-path for chameleon 
 		print("Password for chameleon is %s" % dbChameleonPass)

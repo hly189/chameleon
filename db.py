@@ -1,7 +1,8 @@
 #! /usr/bin/env python3
 
-from os 	import popen, system
-from sys	import argv
+from os			import popen, system
+from sys		import argv
+from mod.mysql  import loadCityData, getMySqlConnection 
 import argparse
 import pymysql
 import myloginpath
@@ -21,6 +22,7 @@ def get_args():
 	parser.add_argument('-login', nargs='+')
 	parser.add_argument('-e', nargs='+')
 	parser.add_argument('-file', nargs='+')
+	parser.add_argument('-load', nargs='+')
 
 	args = parser.parse_args()
 	return args
@@ -36,6 +38,7 @@ def dbHelp():
 	print("-login <user> - login to user")
 	print('-e "<sql query>" - execute query')
 	print('-file <sql file> - execute file sql')
+	print('-load "<table name>"  "<data file>" - load data file to specific table')
 
 #---- Set login without password
 def setlogin(user):
@@ -75,21 +78,10 @@ def dbService(command):
 		print("Falied to Start")
 
 #---- get db connection
-def getMySqlConnection(usr='root'):
-	ipaddress   = "127.0.0.1"
-	charset     = "utf8mb4"
-	curtype     = pymysql.cursors.DictCursor
-
-	conf = myloginpath.parse(usr)
-	sqlCon 	    = pymysql.connect(**conf, host=ipaddress, charset=charset, cursorclass=curtype)
-	sqlCursor   = sqlCon.cursor()
-	return sqlCon, sqlCursor
-
-#---- get db connection
 def createDbUser(user, password):
 	sqlConn, sqlCursor = getMySqlConnection()
 	sqlQueryList = ["CREATE USER IF NOT EXISTS '%s'@'localhost' IDENTIFIED BY '%s';"%(user, password),
-                    "GRANT ALL PRIVILEGES ON * . * TO '%s'@'localhost';" %(user)]
+					"GRANT ALL PRIVILEGES ON * . * TO '%s'@'localhost';" %(user)]
 	
 	for sqlQuery in sqlQueryList:
 		try:
@@ -162,5 +154,8 @@ def main():
 
 		print("List of users:");
 		for user in userList:
-		    print(user)
+			print(user)
+	# Load data to table 
+	if args.load: 
+		if args.load[0].lower() == "citytbl": loadCityData(args.load[1])
 main()

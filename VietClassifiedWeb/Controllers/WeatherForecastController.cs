@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Domain.Model;
 
 namespace VietClassifiedWeb.Controllers
 {
@@ -26,6 +27,7 @@ namespace VietClassifiedWeb.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+            Post newPost = new Post();
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

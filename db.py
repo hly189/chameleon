@@ -1,9 +1,7 @@
 #! /usr/bin/env python3
 
 from os 	import popen, system
-from socket	import gethostname
 from sys	import argv
-from getpass	import getpass
 import argparse
 import pymysql
 import myloginpath

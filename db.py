@@ -21,6 +21,8 @@ def get_args():
 	parser.add_argument('-init', action='store_true')
 	parser.add_argument('-help', action='store_true')
 	parser.add_argument('-login', nargs='+')
+	parser.add_argument('-e', nargs='+')
+	parser.add_argument('-file', nargs='+')
 
 	args = parser.parse_args()
 	return args
@@ -34,6 +36,8 @@ def dbHelp():
 	print("-restart: Restart Database")
 	print("-init: initialize user and password for chameleon")
 	print("-login <user> - login to user")
+	print('-e "<sql query>" - execute query')
+	print('-file <sql file> - execute file sql')
 
 #---- Set login without password
 def setlogin(user):
@@ -46,6 +50,16 @@ def setlogin(user):
 def dbLogin(user):
 	dbLoginCommand = '/usr/local/mysql/bin/mysql --login-path=%s' % user
 	system(dbLoginCommand)
+
+#---- db execute
+def dbExecuteQuery(user, sqlQuery):
+	dbCommand = '/usr/local/mysql/bin/mysql --login-path=%s -e "%s"' % (user, sqlQuery)
+	system(dbCommand)
+
+#---- db file execute
+def dbExecuteFile(user, sqlFile):
+	dbCommand = '/usr/local/mysql/bin/mysql --login-path=%s < %s' % (user, sqlFile)
+	system(dbCommand)
 
 #---- db service
 def dbService(command):
@@ -129,6 +143,15 @@ def main():
 	# Login MySQL
 	if args.login:
 		dbLogin(args.login[0])
+	
+	# Execute query in MySQL
+	if args.e:
+		dbExecuteQuery(dbChameleonUser, args.e[0])
+	
+	# Execute file SQL
+	if args.file:
+		dbExecuteFile(dbChameleonUser, args.file[0])
+	
 	# Init database
 	if args.init:
 		# Set login-path for root

@@ -7,6 +7,12 @@ import argparse
 import pymysql
 import myloginpath
 
+
+#-------------------------------------------------------------
+# Global Variables  
+#-------------------------------------------------------------
+mysqlPath = '/usr/local/mysql/bin/' 
+
 #-------------------------------------------------------------
 # Functions
 #-------------------------------------------------------------
@@ -42,24 +48,36 @@ def dbHelp():
 
 #---- Set login without password
 def setlogin(user):
+	
+	global mysqlPath
+	
 	print("Set login for user: %s" % user)
-	dbLoginCommand = '/usr/local/mysql/bin/mysql_config_editor set --login-path=%s --user=%s --password' % (user, user)
+	dbLoginCommand = mysqlPath + 'mysql_config_editor set --login-path=%s --user=%s --password' % (user, user)
 	system(dbLoginCommand)
 
 
 #---- db login
 def dbLogin(user):
-	dbLoginCommand = '/usr/local/mysql/bin/mysql --login-path=%s' % user
+	
+	global mysqlPath
+
+	dbLoginCommand = mysqlPath + 'mysql --login-path=%s' % user
 	system(dbLoginCommand)
 
 #---- db execute
 def dbExecuteQuery(user, sqlQuery):
-	dbCommand = '/usr/local/mysql/bin/mysql --login-path=%s -e "%s"' % (user, sqlQuery)
+	
+	global mysqlPath
+	
+	dbCommand = mysqlPath + 'mysql --login-path=%s -e "%s"' % (user, sqlQuery)
 	system(dbCommand)
 
 #---- db file execute
 def dbExecuteFile(user, sqlFile):
-	dbCommand = '/usr/local/mysql/bin/mysql --login-path=%s < %s' % (user, sqlFile)
+
+	global mysqlPath
+	
+	dbCommand = mysqlPath + 'mysql --login-path=%s < %s' % (user, sqlFile)
 	system(dbCommand)
 
 #---- db service

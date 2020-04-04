@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `posttbl` (
   `pictureid` INT UNSIGNED,
   `title` VARCHAR(255) NOT NULL,
   `description` LONGTEXT NOT NULL,
+  `address` VARCHAR(200), 
   `cityid` INT,
   `tagname` VARCHAR(255),
   `post_type` CHAR(255),

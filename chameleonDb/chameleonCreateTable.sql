@@ -9,6 +9,8 @@ CREATE TABLE IF NOT EXISTS `usertbl` (
   `first_name` VARCHAR(255) NOT NULL,
   `last_name` VARCHAR(255) NOT NULL,
   `address` VARCHAR(255),
+  `membertship` CHAR(1),
+  `next_payment_date` TIMESTAMP, 
   `cityid` INT,
   PRIMARY KEY (accountid),
   CONSTRAINT usertbl_unique UNIQUE(accountid, username, email)

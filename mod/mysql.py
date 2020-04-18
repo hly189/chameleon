@@ -39,7 +39,7 @@ def loadCityData(fileName):
 	
 	for item in f: 
 		listData = item.strip().split(',')
-		sqlQuery = "INSERT INTO %s.CITYTBL(CITYID, CITY_NAME, STATE, COUNTRY) VALUES (%s, '%s', '%s', '%s');" %(chamelenonDb, listData[0], listData[1], listData[2], listData[3])
+		sqlQuery = """INSERT INTO {DBNAME}.CITYTBL(CITYID, CITY_NAME, STATE, COUNTRY, COUNTY, LATITUDE, LONGTITUDE) VALUES ({CITYID}, "{CITY_NAME}", "{STATE}", "{COUNTRY}", "{COUNTY}", {LATITUDE}, {LONGTITUDE});""" .format(DBNAME=chamelenonDb, CITYID=listData[0], CITY_NAME=listData[1], STATE=listData[2], COUNTRY=listData[3], COUNTY=listData[4], LATITUDE=listData[5], LONGTITUDE=listData[6])
 		try: 
 			sqlCursor.execute(sqlQuery)
 			sqlConn.commit()

@@ -18,7 +18,10 @@ CREATE TABLE IF NOT EXISTS `citytbl` (
   `cityid` INT UNIQUE PRIMARY KEY,
   `city_name` VARCHAR(255),
   `state` CHAR(255),
-  `country` CHAR(255)
+  `country` CHAR(255),
+  `county` CHAR(255),
+  `latitude` DOUBLE,
+  `longtitude` DOUBLE
 ) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `posttbl` (
